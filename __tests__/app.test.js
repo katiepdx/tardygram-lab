@@ -34,8 +34,7 @@ describe('tardygram-lab routes', () => {
       password: 'user1password',
       profile_photo_url: 'profile-photo-url.user1'
     });
-    console.log('OK_USERRRRRRRRRRR', user);
-
+    
     // make login request to app with user info 
     const response = await request(app)
       .post('/api/v1/auth/login')
@@ -44,7 +43,6 @@ describe('tardygram-lab routes', () => {
         password: 'user1password',
         profile_photo_url: 'profile-photo-url.user1'
       });
-    console.log('APP TEST JS LOGIN', response.body);
 
     // expected for successful login 
     expect(response.body).toEqual({
