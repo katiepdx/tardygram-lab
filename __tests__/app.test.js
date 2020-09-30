@@ -1,6 +1,8 @@
 const request = require('supertest');
 const app = require('../lib/app');
 require('../lib/data/data-helpers');
+// import getAgent for logged in user
+const { getAgent } = require('../lib/data/data-helpers');
 
 describe('tardygram-lab routes', () => {
   it('checks that a new user is signed up using POST', async() => {
@@ -43,18 +45,8 @@ describe('tardygram-lab routes', () => {
 
   // verify user - check wristband 
   it('verifies a user using GET', async() => {
-    const agent = request.agent(app);
-    await agent
-    // sign up a user using POST
-      .post('/api/v1/auth/signup')
-      .send({
-        email: 'verifyUser@user1.com',
-        password: 'user1password',
-        profile_photo_url: 'profile-photo-url.user1'
-      });
-    
-    // SUCCESSFUL check
-    const response = await agent
+    // use already logged in user (agent)
+    const response = await getAgent()
       .get('/api/v1/auth/verify');
     // expect match 
     expect(response.body).toEqual({
