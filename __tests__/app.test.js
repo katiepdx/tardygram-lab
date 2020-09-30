@@ -1,14 +1,8 @@
-const fs = require('fs');
-const pool = require('../lib/utils/pool');
 const request = require('supertest');
 const app = require('../lib/app');
-const UserService = require('../lib/services/user-service');
+require('../lib/data/data-helpers');
 
 describe('tardygram-lab routes', () => {
-  beforeEach(() => {
-    return pool.query(fs.readFileSync('./sql/setup.sql', 'utf-8'));
-  });
-
   it('checks that a new user is signed up using POST', async() => {
     const response = await request(app)
       .post('/api/v1/auth/signup')
@@ -28,27 +22,22 @@ describe('tardygram-lab routes', () => {
 
   // login test
   it('checks that a user can login using POST', async() => {
-    // create a user with password hash using UserService create function
-    const user = await UserService.create({
-      email: 'login@user1.com',
-      password: 'user1password',
-      profile_photo_url: 'profile-photo-url.user1'
-    });
-
+    // user already created using seed data
+  
     // make login request to app with user info 
     const response = await request(app)
       .post('/api/v1/auth/login')
       .send({
-        email: 'login@user1.com',
-        password: 'user1password',
-        profile_photo_url: 'profile-photo-url.user1'
+        email: 'login@user3.com',
+        password: 'user3password',
+        profile_photo_url: 'profile-photo-url.user3'
       });
 
     // expected for successful login 
     expect(response.body).toEqual({
-      id: user.id,
-      email: 'login@user1.com',
-      profile_photo_url: 'profile-photo-url.user1'
+      id: expect.any(String),
+      email: 'login@user3.com',
+      profile_photo_url: 'profile-photo-url.user3'
     });
   });
 
